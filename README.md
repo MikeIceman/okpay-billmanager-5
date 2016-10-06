@@ -1,4 +1,4 @@
-MikeIceman/okpay-billmanager5
+MikeIceman/okpay-billmanager-5
 =======================
 
 # Installation & configuration
