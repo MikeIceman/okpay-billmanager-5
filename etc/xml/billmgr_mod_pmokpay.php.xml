@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mgrdata>
+	<plugin name="pmokpay.php">
+		<group>payment_method</group>
+		<author>OKPAY</author>
+		<params>
+			<priority lang="ru">300</priority>
+			<priority lang="ru">800</priority>
+		</params>
+		<msg name="desc_short" lang="ru">OKPAY</msg>
+		<msg name="desc_short" lang="en">OKPAY</msg>
+		<msg name="desc_full" lang="ru">Модуль оплаты OKPAY</msg>
+		<msg name="desc_full" lang="en">OKPAY payment module</msg>
+		<msg name="price" lang="ru">Бесплатно</msg>
+		<msg name="price" lang="en">Free</msg>
+	</plugin>
+
+	<metadata name="paymethod.edit.okpay.php" type="form">
+		<form>
+			<page name="methodprops">
+				<field name="WalletID">
+					<input name="WalletID" private="yes" required="yes" type="text"/>
+				</field>
+				<!--
+				<field name="direct_payment">
+					<select name="direct_payment" type="radio"/>
+				</field>
+				-->
+			</page>
+		</form>
+	</metadata>
+
+	<lang name="en">
+		<messages name="label_paymethod">
+			<msg name="pmokpay.php">OKPAY</msg>
+			<msg name="module_pmokpay.php">OKPAY</msg>
+		</messages>
+		<messages name="paymethod.edit.okpay.php">
+			<msg name="WalletID">WalletID</msg>
+			<msg name="hint_WalletID">Your OKPAY wallet ID (OK123456789)</msg>
+			<!--
+			<msg name="direct_payment">Pay source</msg>
+			<msg name="hint_direct_payment">Pay source</msg>
+			<msg name="all">Any</msg>
+			<msg name="okpay">OKPAY</msg>
+			-->
+		</messages>
+		<messages name="payment.edit.okpay.php">
+			<msg name="email">Email</msg>
+			<msg name="hint_email">Please enter your email address</msg>
+			<msg name="placeholder_email">somebody@example.com</msg>
+		</messages>
+	</lang>
+
+	<lang name="ru">
+		<messages name="label_paymethod">
+			<msg name="pmokpay.php">OKPAY</msg>
+			<msg name="module_pmokpay.php">OKPAY</msg>
+		</messages>
+		<messages name="paymethod.edit.okpay.php">
+			<msg name="WalletID">WalletID</msg>
+			<msg name="hint_WalletID">Номер кошелька получателя платежа (OK123456789)</msg>
+			<!--
+			<msg name="pay_source">Способ оплаты</msg>
+			<msg name="hint_pay_source">Способ оплаты счета</msg>
+			<msg name="all">Любой</msg>
+			<msg name="okpay">Со счета OKPAY</msg>
+			-->
+		</messages>
+		<messages name="payment.edit.okpay.php">
+			<msg name="email">Email</msg>
+			<msg name="hint_email">Ведите Ваш E-mail адрес</msg>
+			<msg name="placeholder_email">somebody@example.com</msg>
+		</messages>
+	</lang>
+</mgrdata>
