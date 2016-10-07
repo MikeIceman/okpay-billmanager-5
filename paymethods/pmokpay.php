@@ -79,7 +79,7 @@ try {
 		throw new Error("unknown command");
 	}
 } catch (Exception $e) {
-	echo $e;
+	echo 'Caught internal exception: '.$e;
 }
 
 ?>
