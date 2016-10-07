@@ -15,17 +15,12 @@
 		<msg name="price" lang="en">Free</msg>
 	</plugin>
 
-	<metadata name="paymethod.edit.okpay.php" type="form">
+	<metadata name="paymethod.edit.pmokpay.php" type="form">
 		<form>
 			<page name="methodprops">
 				<field name="WalletID">
 					<input name="WalletID" private="yes" required="yes" type="text"/>
 				</field>
-				<!--
-				<field name="direct_payment">
-					<select name="direct_payment" type="radio"/>
-				</field>
-				-->
 			</page>
 		</form>
 	</metadata>
@@ -35,17 +30,10 @@
 			<msg name="pmokpay.php">OKPAY</msg>
 			<msg name="module_pmokpay.php">OKPAY</msg>
 		</messages>
-		<messages name="paymethod.edit.okpay.php">
+		<messages name="paymethod.edit.pmokpay.php">
 			<msg name="WalletID">WalletID</msg>
-			<msg name="hint_WalletID">Your OKPAY wallet ID (OK123456789)</msg>
-			<!--
-			<msg name="direct_payment">Pay source</msg>
-			<msg name="hint_direct_payment">Pay source</msg>
-			<msg name="all">Any</msg>
-			<msg name="okpay">OKPAY</msg>
-			-->
 		</messages>
-		<messages name="payment.edit.okpay.php">
+		<messages name="payment.edit.pmokpay.php">
 			<msg name="email">Email</msg>
 			<msg name="hint_email">Please enter your email address</msg>
 			<msg name="placeholder_email">somebody@example.com</msg>
@@ -57,17 +45,11 @@
 			<msg name="pmokpay.php">OKPAY</msg>
 			<msg name="module_pmokpay.php">OKPAY</msg>
 		</messages>
-		<messages name="paymethod.edit.okpay.php">
+		<messages name="paymethod.edit.pmokpay.php">
 			<msg name="WalletID">WalletID</msg>
 			<msg name="hint_WalletID">Номер кошелька получателя платежа (OK123456789)</msg>
-			<!--
-			<msg name="pay_source">Способ оплаты</msg>
-			<msg name="hint_pay_source">Способ оплаты счета</msg>
-			<msg name="all">Любой</msg>
-			<msg name="okpay">Со счета OKPAY</msg>
-			-->
 		</messages>
-		<messages name="payment.edit.okpay.php">
+		<messages name="payment.edit.pmokpay.php">
 			<msg name="email">Email</msg>
 			<msg name="hint_email">Ведите Ваш E-mail адрес</msg>
 			<msg name="placeholder_email">somebody@example.com</msg>
