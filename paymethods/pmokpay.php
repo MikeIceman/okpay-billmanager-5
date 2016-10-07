@@ -1,9 +1,8 @@
 #!/usr/bin/php
 <?php
-
 set_include_path(get_include_path() . PATH_SEPARATOR . "/usr/local/mgr5/include/php");
 define('__MODULE__', "pmokpay");
-require_once 'bill_util.php';
+require_once 'okpay_util.php';
 
 $longopts  = array
 (

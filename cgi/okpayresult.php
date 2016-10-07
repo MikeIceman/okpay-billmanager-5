@@ -2,75 +2,72 @@
 <?php
 set_include_path(get_include_path() . PATH_SEPARATOR . "/usr/local/mgr5/include/php");
 define('__MODULE__', "okpayresult");
-require_once 'bill_util.php';
-//echo "Content-Type: text/xml\n\n";
+require_once 'okpay_util.php';
+echo "Content-Type: text/xml\n\n";
+$out_xml = simplexml_load_string("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<result/>\n");
 
 $param = CgiInput(true);
 
-$status = $param["status"];
-$error = $param["error"];
-$amount = $param["amount"];
-$currency = $param["ccy"];
-$command = $param["command"];
+$status = $param["ok_txn_status"];
+$amount = $param["ok_txn_gross"];
+$currency = $param["ok_txn_currency"];
+$receiver = $param["ok_receiver"];
+$invoice = $param["ok_invoice"];
 
-$out_xml = simplexml_load_string("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<result/>\n");
-
-$x_api_signature = $_SERVER["HTTP_X_API_SIGNATURE"];
-$authorization = $_SERVER["HTTP_AUTHORIZATION"];
-$authorization_array = explode(' ',$authorization);
-$authorization = $authorization_array[1];
-
-Debug("x_api_signature: " . $x_api_signature);
-Debug("authorization: " . $authorization);
-
-if ($x_api_signature == "") {
-	$out_xml->addChild("result_code", "151");
-	$out_xml->addChild("description", "empty signature");
-} elseif ($authorization == "") {
-	$out_xml->addChild("result_code", "150");
-	$out_xml->addChild("description", "empty authorization");
-} elseif ($param["bill_id"] == "") {
+if ($invoice == "") {
 	$out_xml->addChild("result_code", "5");
-	$out_xml->addChild("description", "empty elid");
+	$out_xml->addChild("description", "empty invoice id");
 } else {
-	$info = LocalQuery("payment.info", array("elid" => $param["elid"], ));
-	if ($authorization != base64_encode($info->payment[0]->paymethod[1]->PRV_ID . ":" . $info->payment[0]->paymethod[1]->NOTIFY_PASSWORD)) {
-		$out_xml->addChild("result_code", "150");
-		$out_xml->addChild("description", "bad auth info");
-	} else {
-		ksort($param);
-		$signature_string = "";
-		foreach ($param as $key => $val) {
-			if ($signature_string != "") {
-				$signature_string .= "|";
-			}
-			$signature_string .= $val;
+	$info = LocalQuery("payment.info", array("elid" => $param["ok_invoice"]));
+	
+	$request = 'ok_verify=true';
+	
+	foreach ($param as $key => $value) {
+		$value = urlencode(stripslashes($value));
+		$request .= "&$key=$value";
+	}
+	
+	$ch = curl_init('https://checkout.okpay.com/ipn-verify');
+				
+	curl_setopt($ch, CURLOPT_POST, true);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_HEADER, false);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	
+	$response = curl_exec($ch);
+	
+	if (strcmp($response, 'VERIFIED') == 0 && $amount == (string)$info->payment[0]->paymethodamount && $currency == (string)$info->payment[0]->currency[1]->iso)
+	{
+		if ($status == "completed")
+		{
+			LocalQuery("payment.setpaid", array("elid" => $invoice));
+			$out_xml->addChild("result_code", "0");
 		}
-		$signature = base64_encode(hash_hmac("sha1", $signature_string, $info->payment[0]->paymethod[1]->NOTIFY_PASSWORD, true));
-		if ($signature != $x_api_signature) {
-			$out_xml->addChild("result_code", "151");
-			$out_xml->addChild("description", "invalid signature");
-		} else {
-			if ($command == "bill") {
-				if ($error == "0" && $amount == (string)$info->payment[0]->paymethodamount && $currency == (string)$info->payment[0]->currency[1]->iso) {
-					if ($status == "paid") {
-						LocalQuery("payment.setpaid", array("elid" => $param["bill_id"], ));
-					} else if (status == "waiting") {
-						LocalQuery("payment.setinpay", array("elid" => $param["bill_id"], ));
-					} else if (status == "rejected" || status == "unpaid" || status == "expired") {
-						LocalQuery("payment.setnopay", array("elid" => $param["bill_id"], ));
-					}
-					$out_xml->addChild("result_code", "0");
-				} else {
-					$out_xml->addChild("result_code", "5");
-					$out_xml->addChild("description", "invalid data");
-				}
-			} else {
-				$out_xml->addChild("result_code", "5");
-				$out_xml->addChild("description", "invalid command");
-			}
+		elseif ($status == "pending" || $status == "hold")
+		{
+			LocalQuery("payment.setinpay", array("elid" => $invoice));
+			$out_xml->addChild("result_code", "0");
+		}
+		elseif ($status == "reversed" || $status == "error" || $status == "canceled")
+		{
+			LocalQuery("payment.setnopay", array("elid" => $invoice));
+			$out_xml->addChild("result_code", "0");
+		}
+		else
+		{
+			$out_xml->addChild("result_code", "5");
+			$out_xml->addChild("description", "invalid data");
 		}
 	}
+	else
+	{
+		$out_xml->addChild("result_code", "150");
+		$out_xml->addChild("description", "invalid IPN");
+	}
+	
+	curl_close($ch);
 }
 
 Debug("out: ". $out_xml->asXML());

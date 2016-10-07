@@ -1,7 +1,6 @@
 <?php
 
 $log_file = fopen("/usr/local/mgr5/var/". __MODULE__ .".log", "a");
-$default_xml_string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<doc/>\n";
 
 function tmErrorHandler($errno, $errstr, $errfile, $errline) {
 	global $log_file;
@@ -41,46 +40,6 @@ function LocalQuery($function, $param, $auth = NULL) {
 	Debug("mgrctl out: ". $out_str);
 
 	return simplexml_load_string($out_str);
-}
-
-function HttpQuery($url, $param, $requesttype = "POST", $username = "", $password = "", $header = array("Accept: application/xml")) {
-	Debug("HttpQuery url: " . $url);
-	Debug("Request: " . http_build_query($param));
-	$curl = curl_init($url);
-	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-	curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-
-	if ($requesttype == "DELETE" || $requesttype == "HEAD") {
-		curl_setopt($curl, CURLOPT_NOBODY, 1);
-	}
-
-	if ($requesttype != "POST" && $requesttype != "GET") {
-		curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $requesttype);
-	} elseif ($requesttype == "POST") {
-		curl_setopt($curl, CURLOPT_POST, 1);
-	} elseif ($requesttype == "GET") {
-		curl_setopt($curl, CURLOPT_HTTPGET, 1);
-	}
-
-	if (count($param) > 0) {
-		curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($param));
-	}
-
-	if (count($header) > 0) {
-		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
-	}
-
-	if ($username != "" || $password != "") {
-		curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-		curl_setopt($curl, CURLOPT_USERPWD, $username . ":" . $password);
-	}
-
-	$out = curl_exec($curl) or die(curl_error($curl));
-	Debug("HttpQuery out: " . $out);
-	curl_close($curl);
-
-	return $out;
 }
 
 function CgiInput($skip_auth = false) {
@@ -152,35 +111,6 @@ class Error extends Exception
 
 		Error($error_msg);
 	}
-
-    public function __toString()
-    {
-    	global $default_xml_string;
-
-        $error_xml = simplexml_load_string($default_xml_string);
-        $error_node = $error_xml->addChild("error");
-        $error_node->addAttribute("type", parent::getMessage());
-        if ($this->m_object != "") {
-        	$error_node->addAttribute("object", $this->m_object);
-        	$param = $error_node->addChild("param", $this->m_object);
-        	$param->addAttribute("name", "object");
-        	$param->addAttribute("type", "msg");
-        	$param->addAttribute("msg", $this->m_object);
-        }
-        if ($this->m_value != "") {
-        	$param = $error_node->addChild("param", $this->m_value);
-        	$param->addAttribute("name", "value");
-
-        	$desc = $error_node->addChild("param", "desck_empty");
-        	$desc->addAttribute("name", "desc");
-        	$desc->addAttribute("type", "msg");
-        }
-        foreach ($this->m_param as $name => $value) {
-			$param = $error_node->addChild("param", $value);
-        	$param->addAttribute("name", $name);
-		}
-        return $error_xml->asXML();
-    }
 }
 
 ?>
