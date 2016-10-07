@@ -65,11 +65,9 @@ try {
 		
 	}elseif ($command == "pmvalidate") {
 		$paymethod_form = simplexml_load_string(file_get_contents('php://stdin'));
-		
 		Debug($paymethod_form->asXML());
 		
 		$WalletID = $paymethod_form->WalletID;
-		
 		Debug($WalletID);
 		
 		if (!preg_match("/^OK[0-9]{9}$/", $WalletID)) {
@@ -77,7 +75,6 @@ try {
 		}
 		
 		echo $paymethod_form->asXML();
-		
 	} else {
 		throw new Error("unknown command");
 	}

@@ -13,6 +13,7 @@ $amount = $param["ok_txn_gross"];
 $currency = $param["ok_txn_currency"];
 $receiver = $param["ok_receiver"];
 $invoice = $param["ok_invoice"];
+$txn_id = $param["ok_txn_id"];
 
 if ($invoice == "") {
 	$out_xml->addChild("result_code", "5");

@@ -73,7 +73,6 @@ function CgiInput($skip_auth = false) {
 	if ($skip_auth == false) {
 		Debug("auth: " . $param["auth"]);
 	}
-
 	return $param;
 }
 
@@ -97,7 +96,6 @@ class Error extends Exception
 	private $m_object = "";
 	private $m_value = "";
 	private $m_param = "";
-
 	function __construct($message, $object = "", $value = "", $param = array()) {
 		parent::__construct($message);
 		$this->m_object = $object;
@@ -105,10 +103,13 @@ class Error extends Exception
 		$this->m_param = $param;
 		$error_msg = "Error: ". $message;
 		if ($this->m_object != "")
+		{
 			$error_msg .= ". Object: ". $this->m_object;
+		}
 		if ($this->m_value != "")
+		{
 			$error_msg .= ". Value: ". $this->m_value;
-
+		}
 		Error($error_msg);
 	}
 }
