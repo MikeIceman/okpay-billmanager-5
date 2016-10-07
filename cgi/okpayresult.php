@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 set_include_path(get_include_path() . PATH_SEPARATOR . "/usr/local/mgr5/include/php");
-define('__MODULE__', "okpayresult");
+define('__MODULE__', "okpayresult.php");
 require_once 'okpay_util.php';
 echo "Content-Type: text/xml\n\n";
 $out_xml = simplexml_load_string("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<result/>\n");
