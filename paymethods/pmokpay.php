@@ -4,6 +4,8 @@ set_include_path(get_include_path() . PATH_SEPARATOR . "/usr/local/mgr5/include/
 define('__MODULE__', "pmokpay.php");
 require_once 'okpay_util.php';
 
+$default_xml_string = 
+
 $longopts  = array
 (
     "command:",
@@ -18,7 +20,7 @@ try {
 	Debug("command ". $options['command']);
 
 	if ($command == "config") {
-		$config_xml = simplexml_load_string($default_xml_string);
+		$config_xml = simplexml_load_string("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<result/>\n");
 		$feature_node = $config_xml->addChild("feature");
 		
 		// Refundable

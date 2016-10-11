@@ -4,7 +4,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . "/usr/local/mgr5/include/
 define('__MODULE__', "okpaypayment.php");
 require_once 'okpay_util.php';
 
-echo "Content-Type: text/html
+echo "Content-Type: text/xml\n\n";
 
 $client_ip = ClientIp();
 $param = CgiInput(true);
