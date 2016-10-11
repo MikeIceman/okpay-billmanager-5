@@ -59,11 +59,11 @@ try {
 		
 		$param_node = $config_xml->addChild("param");
 		
-		$param_node->addChild("payment_script", "/mancgi/okpaypayment.php");
+		$param_node->addChild("payment_script", "/mancgi/okpaypayment.php?elid=" . $payment_form->payment_id);
 		
 		echo $config_xml->asXML();
 		
-	}elseif ($command == "pmvalidate") {
+	} elseif ($command == "pmvalidate") {
 		$paymethod_form = simplexml_load_string(file_get_contents('php://stdin'));
 		Debug($paymethod_form->asXML());
 		
@@ -75,6 +75,11 @@ try {
 		}
 		
 		echo $paymethod_form->asXML();
+	//} elseif ($command == "crvalidate") {
+	//	$payment_form = simplexml_load_string(file_get_contents('php://stdin'));
+	//	$ok = $payment_form->addChild("ok", "/mancgi/okpaypayment.php?elid=" . $payment_form->payment_id);
+	//	$ok->addAttribute("type", "5");
+	//	echo $payment_form->asXML();
 	} else {
 		throw new Error("unknown command");
 	}

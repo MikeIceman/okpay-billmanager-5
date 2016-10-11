@@ -9,7 +9,7 @@ echo "Content-Type: text/xml\n\n";
 $client_ip = ClientIp();
 $param = CgiInput(true);
 
-$info = LocalQuery("payment.info", array("elid" => $param["elid"], ));
+$info = LocalQuery("payment.info", array("elid" => $param["elid"]));
 
 $receiver = (string)$info->payment[0]->paymethod[1]->WalletID;
 $amount   = (string)$info->payment[0]->paymethodamount;
