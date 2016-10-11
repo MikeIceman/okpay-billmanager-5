@@ -4,8 +4,6 @@ set_include_path(get_include_path() . PATH_SEPARATOR . "/usr/local/mgr5/include/
 define('__MODULE__', "pmokpay.php");
 require_once 'okpay_util.php';
 
-$default_xml_string = 
-
 $longopts  = array
 (
     "command:",
