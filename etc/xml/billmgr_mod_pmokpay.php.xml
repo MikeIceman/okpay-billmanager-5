@@ -25,6 +25,7 @@
 		</form>
 	</metadata>
 
+
 	<lang name="en">
 		<messages name="label_paymethod">
 			<msg name="pmokpay.php">OKPAY</msg>
@@ -40,6 +41,7 @@
 		</messages>
 	</lang>
 
+	
 	<lang name="ru">
 		<messages name="label_paymethod">
 			<msg name="pmokpay.php">OKPAY</msg>
