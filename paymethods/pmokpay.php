@@ -18,7 +18,7 @@ try {
 	Debug("command ". $options['command']);
 
 	if ($command == "config") {
-		$config_xml = simplexml_load_string("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<result/>\n");
+		$config_xml = simplexml_load_string($default_xml_string);
 		$feature_node = $config_xml->addChild("feature");
 		
 		// Refundable

@@ -8,6 +8,8 @@ function tmErrorHandler($errno, $errstr, $errfile, $errline) {
 	return true;
 }
 
+$default_xml_string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<doc/>\n";
+
 set_error_handler("tmErrorHandler");
 
 function Debug($str) {
