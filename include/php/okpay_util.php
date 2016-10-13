@@ -48,7 +48,10 @@ function LocalQuery($function, $param, $auth = NULL) {
 
 function CgiInput($skip_auth = false) {
 	if ($_SERVER["REQUEST_METHOD"] == 'POST'){
-		$input = file_get_contents("php://stdin");
+		$fp = fopen('php://stdin','r');
+		stream_set_timeout($fp,500);
+		$input = fread($fp, 4096);
+		fclose($fp);
 	} elseif ($_SERVER["REQUEST_METHOD"] == 'GET'){
 		$input = $_SERVER["QUERY_STRING"];
 	}

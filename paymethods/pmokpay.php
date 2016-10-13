@@ -12,7 +12,7 @@ $longopts  = array
 );
 
 $options = getopt("", $longopts);
-Debug('Options: '.serialize($options));
+//Debug('Options: '.serialize($options));
 try {
 	$command = $options['command'];
 	Debug("Сommand: ". $options['command']);

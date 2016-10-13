@@ -30,7 +30,7 @@ echo "<html>
 		<link rel='shortcut icon' href='billmgr.ico' type='image/x-icon' />
 		<script language='JavaScript'>
 			function DoSubmit() {
-				//document.okpayform.submit();
+				document.okpayform.submit();
 			}
 		</script>
 		</head>

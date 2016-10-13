@@ -8,32 +8,33 @@ require_once 'okpay_util.php';
 
 	Debug($_SERVER["REQUEST_METHOD"] . " OKPAY IPN Handler Init");
 	
-	echo "Content-Type: text/html\n\n";
+	echo "Content-Type: text/html\n";
+	echo "Access-Control-Allow-Origin: *\n\n";
 	
-	$params = file_get_contents("php://stdin"); //CgiInput(true);
+	$params = CgiInput(true);
 	
 	Debug(serialize($params));
 	
-	if(!isset($_POST["ok_invoice"]) || empty($_POST["ok_invoice"])) {
+	if(!isset($params["ok_invoice"]) || empty($params["ok_invoice"])) {
 		Debug("Not IPN request");
 		echo '<h1>404 Not Found</h1>';
 		exit;
 	}
 	
 	
-	$status   = $_POST["ok_txn_status"];
-	$amount   = $_POST["ok_txn_gross"];
-	$currency = $_POST["ok_txn_currency"];
-	$receiver = $_POST["ok_receiver"];
-	$invoice  = $_POST["ok_invoice"];
-	$txn_id   = $_POST["ok_txn_id"];
+	$status   = $params["ok_txn_status"];
+	$amount   = $params["ok_txn_gross"];
+	$currency = $params["ok_txn_currency"];
+	$receiver = $params["ok_receiver"];
+	$invoice  = $params["ok_invoice"];
+	$txn_id   = $params["ok_txn_id"];
 	
 	
 	$info = LocalQuery("payment.info", array("elid" => $invoice));
 	
 	$request = 'ok_verify=true';
 	
-	foreach ($_POST as $key => $value) {
+	foreach ($params as $key => $value) {
 		$value = urlencode(stripslashes($value));
 		$request .= "&$key=$value";
 	}
@@ -49,12 +50,12 @@ require_once 'okpay_util.php';
 	
 	$response = curl_exec($ch);
 	
-	Debug($info->asXML());
+	//Debug($info->asXML());
 	
-	/*
+	
 	if (strcmp($response, 'VERIFIED') == 0)
 	{
-		if($amount == (string)$info->payment[0]->paymethodamount && $currency == (string)$info->payment[0]->currency[1]->iso))
+		if($amount == (string)$info->payment[0]->paymethodamount && $currency == (string)$info->payment[0]->currency[1]->iso)
 		{
 			if ($status == "completed")
 			{
@@ -84,12 +85,10 @@ require_once 'okpay_util.php';
 	}
 	else
 	{
-		Debug(serialize($_POST));
+		Debug($response);
 		Debug("Invalid IPN request");
 	}
-	*/
-	curl_close($ch);
 	
-	Debug("----------------");
+	curl_close($ch);
 	
 ?>
