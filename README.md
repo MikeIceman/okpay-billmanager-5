@@ -6,8 +6,8 @@ MikeIceman/okpay-billmanager-5
 0. Important! Make a full backup before any changes!<br />
 1. Copy OKPAY module files into your BILLManager root directory ('/usr/local/mgr5').<br />
 2. In your BILLManager admin panel, go to Provider > Payment methods and click "Add".<br />
-3. Find OKPAY payment module and click "Add".
-4. Fill required fields in Payment method settings and click Finish
+3. Find OKPAY payment module and click "Add".<br />
+4. Fill required fields in Payment method settings and click Finish.
 
 # Usage
 
