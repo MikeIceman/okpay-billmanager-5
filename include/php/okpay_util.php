@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(0);
+
 $log_file = fopen("/usr/local/mgr5/var/". __MODULE__ .".log", "a");
 
 function tmErrorHandler($errno, $errstr, $errfile, $errline) {
@@ -14,12 +16,12 @@ set_error_handler("tmErrorHandler");
 
 function Debug($str) {
 	global $log_file;
-	fwrite($log_file, date("M j H:i:s") ." [". getmypid() ."] ". __MODULE__ ." \033[1;33mDEBUG ". $str ."\033[0m\n");
+	fwrite($log_file, date("M j H:i:s") ." [". getmypid() ."] ". __MODULE__ ." [DEBUG] ". $str ."\n");
 }
 
 function Error($str) {
 	global $log_file;
-	fwrite($log_file, date("M j H:i:s") ." [". getmypid() ."] ". __MODULE__ ." \033[1;31mERROR ". $str ."\033[0m\n");
+	fwrite($log_file, date("M j H:i:s") ." [". getmypid() ."] ". __MODULE__ ." [ERROR] ". $str ."\n");
 }
 
 function LocalQuery($function, $param, $auth = NULL) {

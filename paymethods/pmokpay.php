@@ -1,9 +1,9 @@
 #!/usr/bin/php
 <?php
 set_include_path(get_include_path() . PATH_SEPARATOR . "/usr/local/mgr5/include/php");
-define('__MODULE__', "pmokpay.php");
+define('__MODULE__', "pmokpay");
 require_once 'okpay_util.php';
-
+Debug('OKPAY Module Init');
 $longopts  = array
 (
     "command:",
@@ -12,60 +12,70 @@ $longopts  = array
 );
 
 $options = getopt("", $longopts);
-
+Debug('Options: '.serialize($options));
 try {
 	$command = $options['command'];
-	Debug("command ". $options['command']);
+	Debug("Сommand: ". $options['command']);
 
 	if ($command == "config") {
 		$config_xml = simplexml_load_string($default_xml_string);
 		$feature_node = $config_xml->addChild("feature");
 		
 		// Refundable
-		//$feature_node->addChild("refund",			"on");
+		// $feature_node->addChild("refund", "on");
 		
 		// Allow money transfer
-		// $feature_node->addChild("transfer",		"on");
+		// $feature_node->addChild("transfer", "on");
 		
 		// Redirect to payment system checkout
-		$feature_node->addChild("redirect",			"on");
+		$feature_node->addChild("redirect", "on");
 		
 		// Do not show payment option on checkout form (trminal payments)
-		// $feature_node->addChild("noselect",		"on");
+		// $feature_node->addChild("noselect", "on");
 		
 		// Payer credentials doesn't needed
-		$feature_node->addChild("notneedprofile",	"on");
+		$feature_node->addChild("notneedprofile", "on");
 		
 		// Advanced payment system configuration needed
-		// $feature_node->addChild("pmtune",		"on");
+		//$feature_node->addChild("pmtune", "on");
 		
 		// Validation of payment system custom parameters needed
-		$feature_node->addChild("pmvalidate",		"on");
+		$feature_node->addChild("pmvalidate", "on");
 		
 		// Additional actions in payment form
-		// $feature_node->addChild("crtune",		"on");
+		$feature_node->addChild("crtune", "on");
 		
-		//$feature_node->addChild("crvalidate",		"on");
-		//$feature_node->addChild("crset",			"on");
-		//$feature_node->addChild("crdelete",		"on");
+		//$feature_node->addChild("crvalidate", "on");
+		//$feature_node->addChild("crset", "on");
+		//$feature_node->addChild("crdelete", "on");
 		
-		// $feature_node->addChild("rftune",		"on");
-		// $feature_node->addChild("rfvalidate",	"on");
-		// $feature_node->addChild("rfset", 		"on");
+		// $feature_node->addChild("rftune", "on");
+		// $feature_node->addChild("rfvalidate", "on");
+		// $feature_node->addChild("rfset", "on");
 		
-		// $feature_node->addChild("tftune", 		"on");
-		// $feature_node->addChild("tfvalidate",	"on");
-		// $feature_node->addChild("tfset", 		"on");
+		// $feature_node->addChild("tftune", "on");
+		// $feature_node->addChild("tfvalidate", "on");
+		// $feature_node->addChild("tfset", "on");
 		
 		$param_node = $config_xml->addChild("param");
 		
-		$param_node->addChild("payment_script", "/mancgi/okpaypayment.php?elid=" . $payment_form->payment_id);
+		$param_node->addChild("payment_script", "/mancgi/okpaypayment.php");
+		
+		Debug("Config: ".$config_xml->asXML());
 		
 		echo $config_xml->asXML();
 		
+	} elseif ($command == "pmtune") {
+		$paymethod_form = simplexml_load_string(file_get_contents('php://stdin'));
+		//Debug('Tune params:'. $paymethod_form->asXML());
+		echo $paymethod_form->asXML();
+	} elseif ($command == "crtune") {
+		$paymethod_form = simplexml_load_string(file_get_contents('php://stdin'));
+		// Debug('Tune params:'. $paymethod_form->asXML());
+		echo $paymethod_form->asXML();
 	} elseif ($command == "pmvalidate") {
 		$paymethod_form = simplexml_load_string(file_get_contents('php://stdin'));
-		Debug($paymethod_form->asXML());
+		//Debug($paymethod_form->asXML());
 		
 		$WalletID = $paymethod_form->WalletID;
 		Debug($WalletID);
@@ -75,16 +85,10 @@ try {
 		}
 		
 		echo $paymethod_form->asXML();
-	//} elseif ($command == "crvalidate") {
-	//	$payment_form = simplexml_load_string(file_get_contents('php://stdin'));
-	//	$ok = $payment_form->addChild("ok", "/mancgi/okpaypayment.php?elid=" . $payment_form->payment_id);
-	//	$ok->addAttribute("type", "5");
-	//	echo $payment_form->asXML();
 	} else {
-		throw new Error("unknown command");
+		throw new Error("Unknown command: ".$command);
 	}
 } catch (Exception $e) {
-	echo 'Caught internal exception: '.$e;
+	Debug('Caught internal exception: '.$e);
+	echo $e;
 }
-
-?>
