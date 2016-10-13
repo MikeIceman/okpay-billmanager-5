@@ -7,14 +7,13 @@ MikeIceman/okpay-billmanager-5
 1. Copy OKPAY module files into your BILLManager root directory ('/usr/local/mgr5').<br />
 2. In your BILLManager admin panel, go to Provider > Payment methods and click "Add".<br />
 3. Find OKPAY payment module and click "Add".
-4. Fill required fields in Integration settings and click Next
-4. Fill required fields inPayment method settings and click Finish
+4. Fill required fields in Payment method settings and click Finish
 
 # Usage
 
 When your customers chooses the OKPAY payment method, they will be redirected to OKPAY Checkout where they will pay an invoice.  OKPAY Checkout will then notify your system that the order was paid for.  The customer will be redirected back to his account.  
 
-The order status in the admin panel will be "Processed" if payment has been confirmed. 
+The order status in the admin panel will be "Completed" if payment has been confirmed. 
 
 
 # Support
